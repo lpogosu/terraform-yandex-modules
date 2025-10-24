@@ -1,0 +1,34 @@
+# Remote state in Yandex Object Storage with locking in YDB.
+#
+# Copy to backend.hcl inside the root module you are running (the file is git-ignored),
+# then initialise with:
+#
+#   terraform init -backend-config=../../backend.hcl
+#
+# Credentials are NOT stored here. Export them instead:
+#
+#   export AWS_ACCESS_KEY_ID="$(yc iam access-key ...)"
+#   export AWS_SECRET_ACCESS_KEY="..."
+#
+# The bucket must exist before the first init, must have versioning enabled, and must be
+# encrypted - Terraform state contains bucket secret keys and database passwords in clear text.
+
+bucket = "tfstate-b1gyyyyyyyyyyyyyyyyy"
+key    = "web-app/terraform.tfstate"
+region = "ru-central1"
+
+endpoints = {
+  s3       = "https://storage.yandexcloud.net"
+  dynamodb = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gyyyyyyyyyyyyyyyyy/etnxxxxxxxxxxxxxxxxx"
+}
+
+# The S3 backend is written against AWS; these three switches turn off the checks that
+# only make sense there.
+skip_region_validation      = true
+skip_credentials_validation = true
+skip_requesting_account_id  = true
+skip_s3_checksum            = true
+
+# State locking. Yandex Document API is DynamoDB-compatible, so the same table mechanism
+# works: create a table named `terraform-locks` with a string partition key `LockID`.
+dynamodb_table = "terraform-locks"
