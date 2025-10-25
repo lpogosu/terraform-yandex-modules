@@ -1,0 +1,28 @@
+directory:
+  - .
+
+framework:
+  - terraform
+
+# Modules are scanned through the examples that call them, so every finding carries the
+# concrete values it was produced with instead of the module defaults.
+download-external-modules: false
+evaluate-variables: true
+
+compact: true
+quiet: true
+output:
+  - cli
+
+skip-path:
+  - .*/\.terraform/.*
+
+# Exceptions. Each one is a decision, not a way to make the pipeline green - see the
+# "Решения и компромиссы" section of the root README for the reasoning.
+skip-check:
+  # CKV_YC_19 ("security group allows all") crashes on any rule that targets a security
+  # group instead of a CIDR: checkov 3.2.334 reads conf["ingress"][0]["v4_cidr_blocks"]
+  # unconditionally and raises KeyError on `predefined_target = "self_security_group"`.
+  # The rule it is meant to enforce - no unrestricted ingress - is covered by the module's
+  # own validation, which forces every rule to name exactly one source.
+  - CKV_YC_19
