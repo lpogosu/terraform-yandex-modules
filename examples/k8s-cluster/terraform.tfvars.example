@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars and fill in with your own IDs.
+# terraform.tfvars is git-ignored on purpose: folder and cloud IDs identify a real account.
+
+cloud_id     = "b1gxxxxxxxxxxxxxxxxx"
+folder_id    = "b1gyyyyyyyyyyyyyyyyy"
+default_zone = "ru-central1-a"
+
+cluster_name       = "platform"
+kubernetes_version = "1.30"
+
+workers_min = 2
+workers_max = 8
+
+labels = {
+  managed-by = "terraform"
+  example    = "k8s-cluster"
+  env        = "staging"
+}
