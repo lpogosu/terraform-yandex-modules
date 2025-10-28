@@ -1,0 +1,14 @@
+# Copy to terraform.tfvars and fill in with your own IDs.
+# terraform.tfvars is git-ignored on purpose: folder and cloud IDs identify a real account.
+
+cloud_id     = "b1gxxxxxxxxxxxxxxxxx"
+folder_id    = "b1gyyyyyyyyyyyyyyyyy"
+default_zone = "ru-central1-a"
+
+name_prefix = "demo"
+
+labels = {
+  managed-by = "terraform"
+  example    = "minimal"
+  owner      = "platform"
+}
